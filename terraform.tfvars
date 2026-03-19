@@ -1,7 +1,3 @@
-# terraform.tfvars
-# This file assigns values to the variables declared in variables.tf.
-# You can have different .tfvars files for different environments.
-
-# Set the AWS region variable
-# Replace with your desired region
-default_region = "us-west-2"
+default_region = "us-west-1"
+default_ami="ami-01a1b1a4d93797ddc"
+default_instance_type="t2.micro"
