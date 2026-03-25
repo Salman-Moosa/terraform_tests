@@ -7,8 +7,8 @@ resource "aws_instance" "demo_ec2" {
   ami = var.default_ami
   
   instance_type = var.default_instance_type
-  subnet_id = aws_subnet.Public.id
-  vpc_security_group_ids = [aws_security_group.demo_sg.id]
+  subnet_id = var.public_subnet_id
+  vpc_security_group_ids = vars.security_group_id
   key_name = aws_key_pair.demo_key.key_name
 
   tags = {
