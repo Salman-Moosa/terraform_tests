@@ -22,6 +22,6 @@ variable "default_instance_type" {
 }
 
 variable "security_group_id" {
-  type = list
+  type = string
   description = "describe your variable"
 }
