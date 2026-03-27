@@ -1,3 +1,3 @@
-default_region = "us-west-1"
-default_ami="ami-01a1b1a4d93797ddc"
+default_region = "us-east-1"
+default_ami="ami-02dfbd4ff395f2a1b"
 default_instance_type="t2.micro"
