@@ -2,6 +2,18 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+locals {
+  ingress_rules = [
+    { from_port = 22, to_port = 22, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"] },
+    { from_port = 80, to_port = 80, protocol = "tcp", cidr_blocks = ["0.0.0.0/0"] }
+  ]
+
+  egress_rules = [
+    { from_port = 0, to_port = 0, protocol = "-1", cidr_blocks = ["0.0.0.0/0"] },
+
+  ]
+}
+
 
 resource "aws_vpc" "demo_vpc" {
   cidr_block = var.vpc_cidr
@@ -60,27 +72,29 @@ resource "aws_route_table_association" "private_2" {
   subnet_id = aws_subnet.Private_2.id
   
 }
+
 resource "aws_security_group" "demo_sg" {
   vpc_id = aws_vpc.demo_vpc.id
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol ="tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress"{
+    for_each = local.ingress_rules
+       content {
+            from_port = ingress.value.from_port
+            to_port = ingress.value.to_port
+            protocol =ingress.value.protocol
+            cidr_blocks = ingress.value.cidr_blocks
+    }
 
-  }
-   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  } 
 
-  egress  {
-    from_port = 0
-    to_port =0
-    protocol ="-1"
-    cidr_blocks=["0.0.0.0/0"]
+  dynamic "egress"  {
+    for_each = local.egress_rules
+    content {
+      from_port = egress.value.from_port
+      to_port = egress.value.to_port
+      protocol =egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+    }
+    
   }
   
 }
